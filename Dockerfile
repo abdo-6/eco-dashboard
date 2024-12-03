@@ -8,8 +8,11 @@ COPY frontend/package*.json ./
 RUN npm install
 COPY frontend/ ./
 
-# Build the frontend with the output directly into the backend's public directory
+# Build the frontend output directly into the backend's public directory
 RUN npm run build -- --emptyOutDir
+
+# Debug: Check if the build output exists
+RUN ls -l /app/backend/src/public
 
 # Stage 2: Build the backend
 FROM node:20.10 AS backend-build
@@ -21,10 +24,10 @@ COPY backend/package*.json ./
 RUN npm install
 COPY backend/ ./
 
-# Ensure the frontend build files are already in `src/public`
-# No additional COPY is needed as frontend build output goes directly to the public directory
+# Ensure the frontend files are present in the backend's public directory
+RUN ls -l /app/backend/src/public
 
-# Build the backend (e.g., TypeScript compilation)
+# Build the backend
 RUN npm run build
 
 # Stage 3: Create the production-ready image
