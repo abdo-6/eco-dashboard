@@ -66,11 +66,11 @@ connectMongoDB();
 if (process.env.NODE_ENV === 'production') {
 
   // pour les fichiers statiques depuis le dossier 'backend/src/public' apres build
-  app.use(express.static(path.join(__dirname, 'src', 'public'))); 
+  app.use(express.static(path.join(__dirname, 'public'))); 
 
   //  route pour servir index.html de l'application vue 3 frontend pour toutes les autres requêtes (hors API)
   app.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.resolve(__dirname, 'src', 'public', 'index.html')); 
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html')); 
 
   });
 
