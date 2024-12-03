@@ -1,4 +1,17 @@
-# Stage 1: Build the frontend
+# Stage 1: Build the backend
+FROM node:20.10 AS backend-build
+
+WORKDIR /app/backend
+
+# Copy the backend source files
+COPY backend/package*.json ./
+RUN npm install
+COPY backend/ .
+
+# Build the backend (e.g., TypeScript compilation)
+RUN npm run build
+
+# Stage 2: Build the frontend
 FROM node:20.10 AS frontend-build
 
 WORKDIR /app/frontend
@@ -11,18 +24,7 @@ COPY frontend/ .
 # Build the frontend with the output directly in the backend public folder
 RUN npm run build -- --emptyOutDir
 
-# Stage 2: Build the backend
-FROM node:20.10 AS backend-build
 
-WORKDIR /app/backend
-
-# Copy the backend source files
-COPY backend/package*.json ./
-RUN npm install
-COPY backend/ .
-
-# Build the backend (e.g., TypeScript compilation)
-RUN npm run build
 
 # Stage 3: Create the production-ready image
 FROM node:20.10 AS production
